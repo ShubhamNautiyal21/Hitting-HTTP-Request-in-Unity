@@ -1,9 +1,3 @@
-The WWW API should get this done but UnityWebRequest replaced it so I will answer the newer API. It's really simple. You have to use coroutine to do this with Unity's API otherwise you have have to use one of C# standard web request API and Thread. With coroutine you can yield the request until it is done. This will not block the main Thread or prevent other scripts from running.
-
-Note:
-
-For the examples below, if you are using anything below Unity 2017.2, replace SendWebRequest() with Send() and then replace isNetworkError with isError. This will then work for the lower version of Unity. Also, if you need to access the downloaded data in a binary form instead, replace uwr.downloadHandler.text with uwr.downloadHandler.data. Finally, the SetRequestHeader function is used to set the header of the request.
-
 GET request:
 
 void Start()
