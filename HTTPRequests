@@ -1,0 +1,147 @@
+The WWW API should get this done but UnityWebRequest replaced it so I will answer the newer API. It's really simple. You have to use coroutine to do this with Unity's API otherwise you have have to use one of C# standard web request API and Thread. With coroutine you can yield the request until it is done. This will not block the main Thread or prevent other scripts from running.
+
+Note:
+
+For the examples below, if you are using anything below Unity 2017.2, replace SendWebRequest() with Send() and then replace isNetworkError with isError. This will then work for the lower version of Unity. Also, if you need to access the downloaded data in a binary form instead, replace uwr.downloadHandler.text with uwr.downloadHandler.data. Finally, the SetRequestHeader function is used to set the header of the request.
+
+GET request:
+
+void Start()
+{
+    StartCoroutine(getRequest("http:///www.yoururl.com"));
+}
+
+IEnumerator getRequest(string uri)
+{
+    UnityWebRequest uwr = UnityWebRequest.Get(uri);
+    yield return uwr.SendWebRequest();
+
+    if (uwr.isNetworkError)
+    {
+        Debug.Log("Error While Sending: " + uwr.error);
+    }
+    else
+    {
+        Debug.Log("Received: " + uwr.downloadHandler.text);
+    }
+}
+POST request with Form:
+
+void Start()
+{
+    StartCoroutine(postRequest("http:///www.yoururl.com"));
+}
+
+IEnumerator postRequest(string url)
+{
+    WWWForm form = new WWWForm();
+    form.AddField("myField", "myData");
+    form.AddField("Game Name", "Mario Kart");
+
+    UnityWebRequest uwr = UnityWebRequest.Post(url, form);
+    yield return uwr.SendWebRequest();
+
+    if (uwr.isNetworkError)
+    {
+        Debug.Log("Error While Sending: " + uwr.error);
+    }
+    else
+    {
+        Debug.Log("Received: " + uwr.downloadHandler.text);
+    }
+}
+POST request with Json:
+
+ void Start()
+ {
+     StartCoroutine(postRequest("http:///www.yoururl.com", "your json"));
+ }
+
+ IEnumerator postRequest(string url, string json)
+ {
+     var uwr = new UnityWebRequest(url, "POST");
+     byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
+     uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+     uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+     uwr.SetRequestHeader("Content-Type", "application/json");
+
+     //Send the request then wait here until it returns
+     yield return uwr.SendWebRequest();
+
+     if (uwr.isNetworkError)
+     {
+         Debug.Log("Error While Sending: " + uwr.error);
+     }
+     else
+     {
+         Debug.Log("Received: " + uwr.downloadHandler.text);
+     }
+ }
+POST request with Multipart FormData/Multipart Form File:
+
+void Start()
+{
+    StartCoroutine(postRequest("http:///www.yoururl.com"));
+}
+
+IEnumerator postRequest(string url)
+{
+    List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+    formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
+    formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
+
+    UnityWebRequest uwr = UnityWebRequest.Post(url, formData);
+    yield return uwr.SendWebRequest();
+
+    if (uwr.isNetworkError)
+    {
+        Debug.Log("Error While Sending: " + uwr.error);
+    }
+    else
+    {
+        Debug.Log("Received: " + uwr.downloadHandler.text);
+    }
+}
+PUT request:
+
+void Start()
+{
+    StartCoroutine(putRequest("http:///www.yoururl.com"));
+}
+
+IEnumerator putRequest(string url)
+{
+    byte[] dataToPut = System.Text.Encoding.UTF8.GetBytes("Hello, This is a test");
+    UnityWebRequest uwr = UnityWebRequest.Put(url, dataToPut);
+    yield return uwr.SendWebRequest();
+
+    if (uwr.isNetworkError)
+    {
+        Debug.Log("Error While Sending: " + uwr.error);
+    }
+    else
+    {
+        Debug.Log("Received: " + uwr.downloadHandler.text);
+    }
+}
+DELETE request:
+
+void Start()
+{
+    StartCoroutine(deleteRequest("http:///www.yoururl.com"));
+}
+
+IEnumerator deleteRequest(string url)
+{
+    UnityWebRequest uwr = UnityWebRequest.Delete(url);
+    yield return uwr.SendWebRequest();
+
+    if (uwr.isNetworkError)
+    {
+        Debug.Log("Error While Sending: " + uwr.error);
+    }
+    else
+    {
+        Debug.Log("Deleted");
+    }
+}
