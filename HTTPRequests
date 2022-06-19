@@ -1,4 +1,4 @@
-GET request:
+////////////////////////////////////GET request:////////////////////////////////////
 
 void Start()
 {
@@ -19,7 +19,8 @@ IEnumerator getRequest(string uri)
         Debug.Log("Received: " + uwr.downloadHandler.text);
     }
 }
-POST request with Form:
+
+////////////////////////////////////POST request with Form:////////////////////////////////////
 
 void Start()
 {
@@ -44,7 +45,8 @@ IEnumerator postRequest(string url)
         Debug.Log("Received: " + uwr.downloadHandler.text);
     }
 }
-POST request with Json:
+
+////////////////////////////////////POST request with Json:////////////////////////////////////
 
  void Start()
  {
@@ -71,7 +73,8 @@ POST request with Json:
          Debug.Log("Received: " + uwr.downloadHandler.text);
      }
  }
-POST request with Multipart FormData/Multipart Form File:
+
+////////////////////////////////////POST request with Multipart FormData/Multipart Form File:////////////////////////////////////
 
 void Start()
 {
@@ -96,7 +99,8 @@ IEnumerator postRequest(string url)
         Debug.Log("Received: " + uwr.downloadHandler.text);
     }
 }
-PUT request:
+
+////////////////////////////////////PUT request:////////////////////////////////////
 
 void Start()
 {
@@ -118,7 +122,8 @@ IEnumerator putRequest(string url)
         Debug.Log("Received: " + uwr.downloadHandler.text);
     }
 }
-DELETE request:
+
+////////////////////////////////////DELETE request:////////////////////////////////////
 
 void Start()
 {
